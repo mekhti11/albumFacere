@@ -13,24 +13,23 @@
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
-    <ion-header-bar class="bar-stable">
-      <h1 class="title">Left</h1>
+    <ion-header-bar ng-click="closeLogin()" round class="balanced bar-dark bar-stable button button-dark">
+      <p class="title"  menu-close >
+        Album Facere
+      </p>
     </ion-header-bar>
-    <ion-content>
-      <ion-list>
-        <ion-item menu-close ng-click="login()">
-          Login
-        </ion-item>
-        <ion-item menu-close href="#/app/search">
-          Search
-        </ion-item>
-        <ion-item menu-close href="#/app/browse">
-          Browse
-        </ion-item>
-        <ion-item menu-close href="#/app/playlists">
-          Playlists
-        </ion-item>
-      </ion-list>
+
+    <ion-content id="menu-content">
+      <div class="list">
+        <div class="item item-input padding" >
+          <label class="item-input-wrapper">
+            <input type="text" placeholder="Enter a new Project">
+          </label>
+          <button ion-button class="balanced button button-small button-dark icon icon-right ion-checkmark-circled"></button>
+          
+        </div>
+      </div>
     </ion-content>
+    
   </ion-side-menu>
 </ion-side-menus>
