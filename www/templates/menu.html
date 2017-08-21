@@ -13,7 +13,7 @@
   </ion-side-menu-content>
 
   <ion-side-menu side="left">
-    <ion-header-bar ng-click="closeLogin()" round class="balanced bar-dark bar-stable button button-dark">
+    <ion-header-bar ng-click="closeLogin()" menu-close round class="balanced bar-dark bar-stable button button-dark">
       <p class="title"  menu-close >
         Album Facere
       </p>
@@ -23,13 +23,21 @@
       <div class="list">
         <div class="item item-input padding" >
           <label class="item-input-wrapper">
-            <input type="text" placeholder="Enter a new Project">
+            <input type="text" placeholder="Enter a new Project Name" ng-model = "menuInput.title">
           </label>
-          <button ion-button class="balanced button button-small button-dark icon icon-right ion-checkmark-circled"></button>
+          <button ion-button class="balanced button button-small button-calm icon ion-plus-circled" ng-click="addNewProject(menuInput.title)"></button>
           
         </div>
       </div>
+
+      <div class="list">
+        <div ng-repeat="item in projects" class="item item-input padding item-input-wrapper" style="background-color: white">
+          
+          <button menu-close class="button button-full button-calm" ng-click="goProject(item.id)" style="margin:5px">{{item.title}}</button>
+          <button ion-button class="balanced button button-assertive icon ion-trash-a" ng-click="deleteProject(item.id)"></button>
+        </div>
+      </div>
     </ion-content>
-    
+
   </ion-side-menu>
 </ion-side-menus>

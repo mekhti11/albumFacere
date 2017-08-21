@@ -1,6 +1,26 @@
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout,$state,$ionicSideMenuDelegate) {
+
+.service("myProjectsSerice",function () {
+  this.projects = [
+    {id : 1 , title : "Sinema Bilgi Sistemi" , done : true}
+  ];
+
+  this.saveProject = function(argument) {
+    this.projects.push(argument);
+  };
+
+  this.deleteProject = function(id){
+    for (var i = this.projects.length - 1; i >= 0; i--) {
+      if (this.projects[i].id == id) {
+        this.projects.splice(i,1);
+      }
+    }
+  };
+})
+
+
+.controller('AppCtrl', function($scope, $ionicModal, $timeout,$state,$ionicSideMenuDelegate,myProjectsSerice) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -10,7 +30,10 @@ angular.module('starter.controllers', [])
   //});
 
   // Form data for the login modal
+  $scope.newProject = [];
+  $scope.projects = myProjectsSerice.projects;
   $scope.loginData = {};
+  $scope.menuInput ={};
   $scope.loginData.isLogged = false;
 
   // Create the login modal that we will use later
@@ -54,8 +77,25 @@ angular.module('starter.controllers', [])
       $scope.loginData.password = "";
     }
   };
+
+  //menu.addNewProject()
+  $scope.addNewProject = function(param){
+    if(param){
+      $scope.newProject = {id : myProjectsSerice.projects.length + 1 , title : param , done : false};
+      //$scope.projects.push($scope.newProject);
+      myProjectsSerice.saveProject($scope.newProject);
+      console.log($scope.newProject);
+      $scope.menuInput.title = "";
+    }
+  };
+
+  $scope.deleteProject = function(id){
+    myProjectsSerice.deleteProject(id);
+  };
+
 })
+.controller('ProjectCtrl', function($scope, $stateParams) {
 
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
 });
+
+

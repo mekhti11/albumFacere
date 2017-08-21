@@ -48,6 +48,15 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       controller: 'AppCtrl'
         
       
+    })
+    .state('app.project', {
+      url: '/project',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/project.html',
+          controller : "AppCtrl"
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/main');
