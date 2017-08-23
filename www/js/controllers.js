@@ -2,35 +2,56 @@ angular.module('starter.controllers', [])
 
 
 .service("myProjectsSerice",function () {
-  this.projects = [
-    {id : 1 , title : "Sinema Bilgi Sistemi" , done : true}
-  ];
+  this.projects = [];
+  //this.projects.items=[];
+
 
   this.saveProject = function(argument) {
+    argument.items = [];
     this.projects.push(argument);
+
   };
 
   this.deleteProject = function(id){
-    for (var i = this.projects.length - 1; i >= 0; i--) {
+
+    this.projects.splice(this.findProjectById(id),1);
+
+  };
+
+  this.addItemToProject = function (projectIndex,item) {
+    
+    this.projects[projectIndex].items.push(item);
+  
+  };
+
+  this.deleteItemFromProject = function(projectIndex,itemId){
+
+    this.projects[projectIndex].items.splice(this.findItemById(projecIndex,itemId),1);
+
+  };
+
+  this.findProjectById = function (id) {
+    for (var i = 0; i < this.projects.length; i++) {
       if (this.projects[i].id == id) {
-        this.projects.splice(i,1);
+        return i;
       }
     }
+    
   };
+
+  this.findItemById = function (projectIndex,itemId) {
+    for (var i = 0 ;i < this.projects[projectIndex].items.length;  i++) 
+      if (this.projects[projectId].items[i].id == id) 
+        return i;
+  };
+
 })
 
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout,$state,$ionicSideMenuDelegate,myProjectsSerice) {
+.controller('AppCtrl', function($scope, $ionicModal, $rootScope,$state,$ionicSideMenuDelegate,myProjectsSerice) {
 
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  // Form data for the login modal
-  $scope.newProject = [];
+  //init datas for this controller
+  $scope.newProject = {};
   $scope.projects = myProjectsSerice.projects;
   $scope.loginData = {};
   $scope.menuInput ={};
@@ -45,6 +66,8 @@ angular.module('starter.controllers', [])
   if ($scope.loginData.isLogged === false) {
     $state.go('login');
   }
+
+
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
     $scope.modal.hide();
@@ -65,36 +88,75 @@ angular.module('starter.controllers', [])
     if ($scope.loginData.username == "mekhti" && $scope.loginData.password == "mekhti") {
       $scope.loginData.isLogged = true;
       console.log('Doing login', $scope.loginData);
-      // Simulate a login delay. Remove this and replace with your login
-      // code if using a login system
-      //$timeout(function() {
       $scope.closeLogin();
-      //}, 1000);
     }
     else{
       $scope.loginData.isLogged = false;
       $scope.loginData.username = "";
       $scope.loginData.password = "";
+      $state.go('login');
     }
   };
 
   //menu.addNewProject()
   $scope.addNewProject = function(param){
     if(param){
-      $scope.newProject = {id : myProjectsSerice.projects.length + 1 , title : param , done : false};
-      //$scope.projects.push($scope.newProject);
+
+      //To avoiding to assign same id for orojects
+      $scope.maxIdOfProjects = 0 ;
+      if($scope.projects.length > 0){
+        $scope.maxIdOfProjects = $scope.projects[0].id;      
+        for (var i = 1; i < $scope.projects.length; i++) 
+          if($scope.maxIdOfProjects < $scope.projects[i].id)
+              $scope.maxIdOfProjects = $scope.projects[i].id;
+      }
+
+      $scope.newProject = {
+        id : $scope.maxIdOfProjects + 1 , 
+        title : param , 
+        done : false  
+      };
+
       myProjectsSerice.saveProject($scope.newProject);
-      console.log($scope.newProject);
       $scope.menuInput.title = "";
     }
   };
 
   $scope.deleteProject = function(id){
     myProjectsSerice.deleteProject(id);
+    $state.go('app.main');
+    $ionicSideMenuDelegate.canDragContent(true);
   };
 
+
 })
-.controller('ProjectCtrl', function($scope, $stateParams) {
+.controller('ProjectCtrl', function($scope,$rootScope,$ionicSideMenuDelegate, $stateParams,myProjectsSerice) {
+  
+  //init datas for this controller
+    $scope.projectIndex = myProjectsSerice.findProjectById($stateParams.id);
+    $scope.project = myProjectsSerice.projects[$scope.projectIndex];
+
+
+  $scope.addItemToProject = function () {
+    console.log(1);
+    console.log($scope.project);
+    $scope.maxIdOfItems = 0;
+    if($scope.project.items.length > 0){
+      $scope.maxIdOfItems = $scope.project.items[0].itemId;
+      for (var i = $scope.project.items.length - 1; i > 0; i--) {
+        if($scope.maxIdOfItems < $scope.project.items[i].itemId)
+          $scope.maxIdOfItems = $scope.project.items[i].itemId;
+      }
+    }
+    $scope.newItem = {
+      itemId : $scope.maxIdOfItems + 1,
+      itemTitle : "param + 1",
+      done : false
+    };
+    myProjectsSerice.addItemToProject($scope.projectIndex,$scope.newItem);
+    
+    
+  };
 
 });
 

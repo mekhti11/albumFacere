@@ -1,5 +1,26 @@
-<ion-view view-title="Browse">
+<ion-view view-title="{{project.title}}">
   <ion-content>
-    <h1>{{item.id}}asfaf</h1>
+    
+	<div class="list">
+		<div class="item item-input padding item-input-wrapper" style="background-color: white">
+			<button menu-close class="balanced button button-full button-positive icon icon-left ion-plus-circled" ng-click="addItemToProject()">
+				Add new ToDo for Project
+			</button>
+		</div>
+	</div>
+
+	<div class="list">
+		<div ng-repeat="item in project.items" class="item item-input padding item-input-wrapper" style="background-color: white">
+      
+      <button menu-close class="button button-full button-positive" style="margin:3px" type="button" disabled >
+        {{item.itemTitle}}
+      </button>
+      <button ion-button style="border-style: solid;" class="balanced button button-outline button-stable icon ion-edit"></button>
+      <button ion-button style="margin-left: 3px" class="balanced button button-assertive icon ion-trash-a"></button>
+  </div>
+	      
+		</div>
+	</div>  	
+
   </ion-content>
 </ion-view>

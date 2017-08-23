@@ -50,11 +50,11 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       
     })
     .state('app.project', {
-      url: '/project',
+      url: '/project/:id',
       views: {
         'menuContent': {
           templateUrl: 'templates/project.html',
-          controller : "AppCtrl"
+          controller : "ProjectCtrl"
         }
       }
     });

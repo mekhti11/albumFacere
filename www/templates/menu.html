@@ -25,7 +25,7 @@
           <label class="item-input-wrapper">
             <input type="text" placeholder="Enter a new Project Name" ng-model = "menuInput.title">
           </label>
-          <button ion-button class="balanced button button-small button-calm icon ion-plus-circled" ng-click="addNewProject(menuInput.title)"></button>
+          <button ion-button class="balanced button button-small button-calm icon ion-checkmark-circled" ng-click="addNewProject(menuInput.title)"></button>
           
         </div>
       </div>
@@ -33,8 +33,18 @@
       <div class="list">
         <div ng-repeat="item in projects" class="item item-input padding item-input-wrapper" style="background-color: white">
           
-          <button menu-close class="button button-full button-calm" ng-click="goProject(item.id)" style="margin:5px">{{item.title}}</button>
-          <button ion-button class="balanced button button-assertive icon ion-trash-a" ng-click="deleteProject(item.id)"></button>
+          <a style="width : 200px;margin-right: 10px;text-decoration: none;" href="#/app/project/{{item.id}}" ng-click="anan()">
+            <button menu-close class="button button-full button-calm" style="margin:5px">
+              {{item.title}}
+            </button>
+          </a>
+
+          <a href="#/" ng-click="deleteProject(item.id)">
+            <button ion-button class="balanced button button-assertive icon ion-trash-a">
+              
+            </button>
+          </a>
+
         </div>
       </div>
     </ion-content>
