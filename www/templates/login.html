@@ -1,9 +1,14 @@
-<ion-modal-view style="background-image: url(http://wallpapercave.com/wp/ToYo4Ig.jpg);">
+<ion-modal-view >
   <ion-header-bar class="bar bar-dark">
     <h1 class="title ">Login</h1>
   </ion-header-bar>
-  <ion-content style="opacity : 0.95;margin-top: 200px">
-    <form ng-submit="doLogin()">
+  <ion-content style="">
+
+    <br><br><br>
+    <div class="title" id="nameofapp">
+      ALBUM FACERE
+    </div>
+    <form ng-submit="doLogin()" style="margin-top: 40px">
       <div class="list">
         <label class="item item-input">
           <span class="input-label">Username</span>
@@ -16,7 +21,16 @@
         <label class="item">
           <button class="button button-block button-positive" type="submit">Log in</button>
         </label>
+       <div class="title" style="font-size:small;">
+          Forgot your login details? <strong><a style="color: black;text-decoration: none;" href = "#/register">Get Help signing in</a></strong>
+        </div>
+
       </div>
     </form>
   </ion-content>
+  <div class="bar bar-footer">
+    <div class="title" style="font-size:small;">
+      Don't have an account? <strong><a style="color: black;text-decoration: none;" href = "#/register">Sign up now!</a></strong>
+    </div>
+  </div>
 </ion-modal-view>

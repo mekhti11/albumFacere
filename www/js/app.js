@@ -22,7 +22,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider , $ionicConfigProvider) {
+  
   $stateProvider
 
     .state('app', {
@@ -43,13 +44,18 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
     .state('login', {
       url: '/login',
-
       templateUrl: 'templates/login.html',
-      controller: 'AppCtrl'
-        
-      
+      controller: 'AppCtrl'   
     })
+
+    .state('register', {
+      url: '/register',
+      templateUrl: 'templates/register.html',
+      controller: 'AppCtrl'   
+    })
+
     .state('app.project', {
+      cache: false,
       url: '/project/:id',
       views: {
         'menuContent': {
@@ -59,5 +65,5 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/main');
+  $urlRouterProvider.otherwise('/login');
 });

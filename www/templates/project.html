@@ -11,12 +11,18 @@
 
 	<div class="list">
 		<div ng-repeat="item in project.items" class="item item-input padding item-input-wrapper" style="background-color: white">
-      
-      <button menu-close class="button button-full button-positive" style="margin:3px" type="button" disabled >
-        {{item.itemTitle}}
-      </button>
-      <button ion-button style="border-style: solid;" class="balanced button button-outline button-stable icon ion-edit"></button>
-      <button ion-button style="margin-left: 3px" class="balanced button button-assertive icon ion-trash-a"></button>
+          
+      <ion-checkbox ng-model="item.itemDone" class="projectTitle" ng-click="print(item)">
+      	<a style="color : black;text-decoration: line-through;" ng-show="item.itemDone">
+      		{{item.itemTitle}}
+      	</a>
+      	<a style="color : black" ng-hide="item.itemDone">
+      		{{item.itemTitle}}
+      	</a>
+      </ion-checkbox>
+      			
+      <button ion-button style="border-style: solid;" class="balanced button button-positive button-stable icon ion-edit"></button>
+      <button ion-button style="margin-left: 3px" ng-click="deleteItemFromProject(item.itemId)" class="balanced button button-assertive icon ion-trash-a"></button>
   </div>
 	      
 		</div>

@@ -14,7 +14,8 @@ angular.module('starter.controllers', [])
 
   this.deleteProject = function(id){
 
-    this.projects.splice(this.findProjectById(id),1);
+    this.projects.splice(this.findProjectById(id),1); 
+    console.log(this.projects);
 
   };
 
@@ -26,7 +27,7 @@ angular.module('starter.controllers', [])
 
   this.deleteItemFromProject = function(projectIndex,itemId){
 
-    this.projects[projectIndex].items.splice(this.findItemById(projecIndex,itemId),1);
+    this.projects[projectIndex].items.splice(this.findItemById(projectIndex,itemId),1);
 
   };
 
@@ -41,14 +42,14 @@ angular.module('starter.controllers', [])
 
   this.findItemById = function (projectIndex,itemId) {
     for (var i = 0 ;i < this.projects[projectIndex].items.length;  i++) 
-      if (this.projects[projectId].items[i].id == id) 
+      if (this.projects[projectIndex].items[i].itemId == itemId) 
         return i;
   };
 
 })
 
 
-.controller('AppCtrl', function($scope, $ionicModal, $rootScope,$state,$ionicSideMenuDelegate,myProjectsSerice) {
+.controller('AppCtrl', function($scope, $ionicModal,$ionicPopup, $rootScope,$state,$ionicSideMenuDelegate,myProjectsSerice) {
 
   //init datas for this controller
   $scope.newProject = {};
@@ -63,10 +64,10 @@ angular.module('starter.controllers', [])
   }).then(function(modal) {
     $scope.modal = modal;
   });
-  if ($scope.loginData.isLogged === false) {
+ /* if ($scope.loginData.isLogged === false) {
     $state.go('login');
   }
-
+*/
 
   // Triggered in the login modal to close it
   $scope.closeLogin = function() {
@@ -85,12 +86,16 @@ angular.module('starter.controllers', [])
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
-    if ($scope.loginData.username == "mekhti" && $scope.loginData.password == "mekhti") {
+    if ($scope.loginData.username == "1" && $scope.loginData.password == "1") {
       $scope.loginData.isLogged = true;
       console.log('Doing login', $scope.loginData);
       $scope.closeLogin();
     }
     else{
+      var alertPopup = $ionicPopup.alert({
+                title: 'Login failed!',
+                template: 'Please check your credentials!'
+            });
       $scope.loginData.isLogged = false;
       $scope.loginData.username = "";
       $scope.loginData.password = "";
@@ -153,9 +158,15 @@ angular.module('starter.controllers', [])
       itemTitle : "param + 1",
       done : false
     };
-    myProjectsSerice.addItemToProject($scope.projectIndex,$scope.newItem);
-    
-    
+    myProjectsSerice.addItemToProject($scope.projectIndex,$scope.newItem);    
+  };
+
+  $scope.print = function(item){
+    console.log($scope.project);
+  };
+
+  $scope.deleteItemFromProject = function (itemId) {
+    myProjectsSerice.deleteItemFromProject($scope.projectIndex,itemId);  
   };
 
 });

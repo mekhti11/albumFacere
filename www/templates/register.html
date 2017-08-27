@@ -1,0 +1,36 @@
+<ion-modal-view >
+  <ion-header-bar class="bar bar-dark">
+    <h1 class="title ">Registration</h1>
+  </ion-header-bar>
+  <ion-content style="">
+       <br><br><br>
+    <div class="title" id="nameofapp">
+      ALBUM FACERE
+    </div>
+    <form ng-submit="doRegister()" style="margin-top: 40px">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Username</span>
+          <input type="text" ng-model="registrData.username">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">E-Mail</span>
+          <input type="email" ng-model="registrData.email">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+          <input type="password" ng-model="registrData.password">
+        </label>
+        <label class="item">
+          <button class="button button-block button-positive" type="submit">Sign up</button>
+        </label>
+        
+      </div>
+    </form>
+  </ion-content>
+  <div class="bar bar-footer">
+    <div class="title" style="font-size:small;">
+      Already have an account? <strong><a style="color:black;text-decoration: none;" href = "#/login">Sign in now!</a></strong>
+    </div>
+  </div>
+</ion-modal-view>

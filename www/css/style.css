@@ -1,5 +1,20 @@
 /* Empty. Add your own CSS if you like */
+@import url('https://fonts.googleapis.com/css?family=Indie+Flower');
 
 #menu-content{
 	margin-top:  20px;
+}
+
+.projectTitle{
+	background:white;
+	width : 300px;
+	height: 48px;
+	margin-right: 3px
+}
+
+#nameofapp{
+	margin: auto;
+	text-align: center;
+	font-size: 325%;
+	font-family: 'Indie Flower', cursive;
 }
