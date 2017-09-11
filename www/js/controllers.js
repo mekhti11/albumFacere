@@ -103,6 +103,12 @@ angular.module('starter.controllers', [])
     }
   };
 
+  $scope.getHelp = function () {
+    var alertPopup = $ionicPopup.alert({
+                title: 'Login Details!',
+                template: 'username : 1 , password : 1 '
+            });
+  };
   //menu.addNewProject()
   $scope.addNewProject = function(param){
     if(param){
@@ -140,25 +146,30 @@ angular.module('starter.controllers', [])
   //init datas for this controller
     $scope.projectIndex = myProjectsSerice.findProjectById($stateParams.id);
     $scope.project = myProjectsSerice.projects[$scope.projectIndex];
+    $scope.projectInput = {};
 
 
-  $scope.addItemToProject = function () {
-    console.log(1);
-    console.log($scope.project);
-    $scope.maxIdOfItems = 0;
-    if($scope.project.items.length > 0){
-      $scope.maxIdOfItems = $scope.project.items[0].itemId;
-      for (var i = $scope.project.items.length - 1; i > 0; i--) {
-        if($scope.maxIdOfItems < $scope.project.items[i].itemId)
-          $scope.maxIdOfItems = $scope.project.items[i].itemId;
+  $scope.addItemToProject = function (param) {
+
+    if (param) {
+      console.log(1);
+      console.log($scope.project);
+      $scope.maxIdOfItems = 0;
+      if($scope.project.items.length > 0){
+        $scope.maxIdOfItems = $scope.project.items[0].itemId;
+        for (var i = $scope.project.items.length - 1; i > 0; i--) {
+          if($scope.maxIdOfItems < $scope.project.items[i].itemId)
+            $scope.maxIdOfItems = $scope.project.items[i].itemId;
+        }
       }
-    }
-    $scope.newItem = {
-      itemId : $scope.maxIdOfItems + 1,
-      itemTitle : "param + 1",
-      done : false
-    };
-    myProjectsSerice.addItemToProject($scope.projectIndex,$scope.newItem);    
+      $scope.newItem = {
+        itemId : $scope.maxIdOfItems + 1,
+        itemTitle : param,
+        done : false
+      };
+      myProjectsSerice.addItemToProject($scope.projectIndex,$scope.newItem); 
+      $scope.projectInput.newItemTitle = "";
+    } 
   };
 
   $scope.print = function(item){

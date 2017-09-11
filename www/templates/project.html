@@ -2,9 +2,12 @@
   <ion-content>
     
 	<div class="list">
-		<div class="item item-input padding item-input-wrapper" style="background-color: white">
-			<button menu-close class="balanced button button-full button-positive icon icon-left ion-plus-circled" ng-click="addItemToProject()">
-				Add new ToDo for Project
+		<div class="item item-input padding" style="background-color: white">
+			<label class="item-input-wrapper">
+        <input type="text" placeholder="Enter a new ToDo for Project" ng-model = "projectInput.newItemTitle">
+      </label>
+      <button menu-close class="balanced button button-small button-positive icon icon-left ion-plus-circled" ng-click="addItemToProject(projectInput.newItemTitle)">
+				Add
 			</button>
 		</div>
 	</div>
@@ -20,8 +23,6 @@
       		{{item.itemTitle}}
       	</a>
       </ion-checkbox>
-      			
-      <button ion-button style="border-style: solid;" class="balanced button button-positive button-stable icon ion-edit"></button>
       <button ion-button style="margin-left: 3px" ng-click="deleteItemFromProject(item.itemId)" class="balanced button button-assertive icon ion-trash-a"></button>
   </div>
 	      
