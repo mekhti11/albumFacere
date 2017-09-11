@@ -13,9 +13,9 @@
 	</div>
 
 	<div class="list">
-		<div ng-repeat="item in project.items" class="item item-input padding item-input-wrapper" style="background-color: white">
+		<div ng-repeat="item in items" class="item item-input padding item-input-wrapper" style="background-color: white">
           
-      <ion-checkbox ng-model="item.itemDone" class="projectTitle" ng-click="print(item)">
+      <ion-checkbox ng-model="item.itemDone" ng-click="itemChanged(item)" class="projectTitle" ng-click="print(item)">
       	<a style="color : black;text-decoration: line-through;" ng-show="item.itemDone">
       		{{item.itemTitle}}
       	</a>
@@ -23,7 +23,7 @@
       		{{item.itemTitle}}
       	</a>
       </ion-checkbox>
-      <button ion-button style="margin-left: 3px" ng-click="deleteItemFromProject(item.itemId)" class="balanced button button-assertive icon ion-trash-a"></button>
+      <button ion-button style="margin-left: 3px" ng-click="deleteItemFromProject(item)" class="balanced button button-assertive icon ion-trash-a"></button>
   </div>
 	      
 		</div>

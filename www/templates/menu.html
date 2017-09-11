@@ -33,13 +33,13 @@
       <div class="list">
         <div ng-repeat="item in projects" class="item item-input padding item-input-wrapper" style="background-color: white">
           
-          <a style="width : 200px;margin-right: 10px;text-decoration: none;" href="#!/app/project/{{item.id}}">
+          <a style="width : 200px;margin-right: 10px;text-decoration: none;" ng-click="chosenProject(item.id)" href="#/app/project/{{item.id}}">
             <button menu-close class="button button-full button-calm" style="margin:5px">
               {{item.title}}
             </button>
           </a>
 
-          <a href="#!/" ng-click="deleteProject(item.id)">
+          <a  ng-click="deleteProject(item)">
             <button ion-button class="balanced button button-assertive icon ion-trash-a">
               
             </button>

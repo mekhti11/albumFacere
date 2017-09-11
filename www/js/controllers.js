@@ -1,59 +1,14 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['firebase'])
 
 
-.service("myProjectsSerice",function () {
-  this.projects = [];
-  //this.projects.items=[];
 
-
-  this.saveProject = function(argument) {
-    argument.items = [];
-    this.projects.push(argument);
-
-  };
-
-  this.deleteProject = function(id){
-
-    this.projects.splice(this.findProjectById(id),1); 
-    console.log(this.projects);
-
-  };
-
-  this.addItemToProject = function (projectIndex,item) {
-    
-    this.projects[projectIndex].items.push(item);
-  
-  };
-
-  this.deleteItemFromProject = function(projectIndex,itemId){
-
-    this.projects[projectIndex].items.splice(this.findItemById(projectIndex,itemId),1);
-
-  };
-
-  this.findProjectById = function (id) {
-    for (var i = 0; i < this.projects.length; i++) {
-      if (this.projects[i].id == id) {
-        return i;
-      }
-    }
-    
-  };
-
-  this.findItemById = function (projectIndex,itemId) {
-    for (var i = 0 ;i < this.projects[projectIndex].items.length;  i++) 
-      if (this.projects[projectIndex].items[i].itemId == itemId) 
-        return i;
-  };
-
-})
-
-
-.controller('AppCtrl', function($scope, $ionicModal,$ionicPopup, $rootScope,$state,$ionicSideMenuDelegate,myProjectsSerice) {
+.controller('AppCtrl', function($scope,$firebaseAuth,$firebaseArray,$ionicModal,$ionicPopup, $rootScope,$state,$ionicSideMenuDelegate) {
 
   //init datas for this controller
+  var ref  = firebase.database().ref().child('projects');
+
   $scope.newProject = {};
-  $scope.projects = myProjectsSerice.projects;
+  $scope.projects = $firebaseArray(ref);
   $scope.loginData = {};
   $scope.menuInput ={};
   $scope.loginData.isLogged = false;
@@ -86,12 +41,14 @@ angular.module('starter.controllers', [])
   // Perform the login action when the user submits the login form
   $scope.doLogin = function() {
 
-    if ($scope.loginData.username == "1" && $scope.loginData.password == "1") {
+    var username = $scope.loginData.username;
+    var password = $scope.loginData.password;
+    var auth = $firebaseAuth();
+    auth.$signInWithEmailAndPassword(username,password).then(function(){
+      console.log("Logged in Successfully");
       $scope.loginData.isLogged = true;
-      console.log('Doing login', $scope.loginData);
       $scope.closeLogin();
-    }
-    else{
+    }).catch(function(error){
       var alertPopup = $ionicPopup.alert({
                 title: 'Login failed!',
                 template: 'Please check your credentials!'
@@ -100,15 +57,28 @@ angular.module('starter.controllers', [])
       $scope.loginData.username = "";
       $scope.loginData.password = "";
       $state.go('login');
-    }
+    });
+
   };
 
   $scope.getHelp = function () {
     var alertPopup = $ionicPopup.alert({
                 title: 'Login Details!',
-                template: 'username : 1 , password : 1 '
+                template: 'username : mekhti11@gmail.com  password : mekhti11 '
             });
   };
+
+  $scope.findProjectById = function (id) {
+    for (var i = 0; i < $scope.projects.length; i++) {
+      if ($scope.projects[i].id == id) {
+        return i;
+      }
+    }
+    
+  };
+
+
+
   //menu.addNewProject()
   $scope.addNewProject = function(param){
     if(param){
@@ -122,64 +92,98 @@ angular.module('starter.controllers', [])
               $scope.maxIdOfProjects = $scope.projects[i].id;
       }
 
-      $scope.newProject = {
+      $scope.projects.$add({
         id : $scope.maxIdOfProjects + 1 , 
         title : param , 
-        done : false  
-      };
+        done : false ,
+      }).then(function(ref){
+        console.log("add works ok");
+      });
 
-      myProjectsSerice.saveProject($scope.newProject);
       $scope.menuInput.title = "";
+      console.log($scope.projects.length);
     }
   };
 
-  $scope.deleteProject = function(id){
-    myProjectsSerice.deleteProject(id);
+  $scope.deleteProject = function(param){
+    
+    var fer  = firebase.database().ref().child('items');
+    $scope.itemsAll = $firebaseArray(fer);
+    $scope.itemsAll.$loaded()
+    .then(function(){
+        angular.forEach($scope.itemsAll, function(item) {
+          if(item.projectId == param.id)
+            $scope.itemsAll.$remove(item);
+        });
+    });
+    $scope.projects.$remove(param);
     $state.go('app.main');
     $ionicSideMenuDelegate.canDragContent(true);
   };
 
+  $scope.chosenProject = function(id){
+    $scope.chosenProjectId = id;
+    console.log($scope.projects[$scope.findProjectById(id)]);
+
+  };
 
 })
-.controller('ProjectCtrl', function($scope,$rootScope,$ionicSideMenuDelegate, $stateParams,myProjectsSerice) {
+.controller('ProjectCtrl', function($scope,$firebaseArray,$rootScope,$ionicSideMenuDelegate, $stateParams) {
   
   //init datas for this controller
-    $scope.projectIndex = myProjectsSerice.findProjectById($stateParams.id);
-    $scope.project = myProjectsSerice.projects[$scope.projectIndex];
+    var ref  = firebase.database().ref().child('items');
+    $scope.itemsAll = $firebaseArray(ref);
+    $scope.items = [];
     $scope.projectInput = {};
+    
+  // initing items
+  
+  $scope.init = function(){
+    $scope.items = [];
+    $scope.itemsAll.$loaded()
+    .then(function(){
+        angular.forEach($scope.itemsAll, function(item) {
+          if(item.projectId == $stateParams.id)
+            $scope.items.push(item);
+        });
+    });   
+  };$scope.init();
+  
 
 
   $scope.addItemToProject = function (param) {
 
     if (param) {
-      console.log(1);
-      console.log($scope.project);
-      $scope.maxIdOfItems = 0;
-      if($scope.project.items.length > 0){
-        $scope.maxIdOfItems = $scope.project.items[0].itemId;
-        for (var i = $scope.project.items.length - 1; i > 0; i--) {
-          if($scope.maxIdOfItems < $scope.project.items[i].itemId)
-            $scope.maxIdOfItems = $scope.project.items[i].itemId;
-        }
-      }
-      $scope.newItem = {
-        itemId : $scope.maxIdOfItems + 1,
+      $scope.itemsAll.$add({
+        projectId : $stateParams.id,
         itemTitle : param,
-        done : false
-      };
-      myProjectsSerice.addItemToProject($scope.projectIndex,$scope.newItem); 
+        itemDone : false
+      }).then(function(ref){
+        //
+      });
+
+      
       $scope.projectInput.newItemTitle = "";
+      $scope.init();
     } 
   };
 
-  $scope.print = function(item){
-    console.log($scope.project);
+  $scope.deleteItemFromProject = function (item) {
+      $scope.itemsAll.$remove(item);
+      $scope.init();
   };
 
-  $scope.deleteItemFromProject = function (itemId) {
-    myProjectsSerice.deleteItemFromProject($scope.projectIndex,itemId);  
+  $scope.itemChanged = function(param){
+    $scope.itemsAll.$loaded()
+    .then(function(){
+        angular.forEach($scope.itemsAll, function(item) {
+          if(item == param){
+            $scope.itemsAll.$remove(item);
+            $scope.itemsAll.$add(param);
+            //$scope.init();
+          }
+        });
+      });
   };
 
 });
-
-
